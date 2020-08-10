@@ -1,26 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import Header from "./components/Header";
+import ListTodos from "./components/ListTodos";
+import TodoItem from "./models/TodoItem";
+import Input from "./components/Input";
+import Button from "./components/Button";
 
-function App() {
+const App: React.FC = () => {
+  const [todos, setTodos] = useState<TodoItem[]>([]);
+  const [newTodo, setNewTodo] = useState<TodoItem>({ title: "" });
+
+  // functions
+  function handleClickButton() {
+    setTodos([...todos, { ...newTodo }]);
+    setNewTodo({ title: "" });
+  }
+
+  // hooks
+  useEffect(() => {
+    setTodos([{ title: "eat" }, { title: "sleep" }]);
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Header />
+      <Input
+        name="add"
+        value={newTodo?.title}
+        onChange={(e) => setNewTodo({ title: e.target.value })}
+      />
+      <Button onClick={() => handleClickButton()}>add</Button>
+      <ListTodos todos={todos} />
+    </>
   );
-}
+};
 
 export default App;
